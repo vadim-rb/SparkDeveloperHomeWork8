@@ -8,7 +8,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 object Main {
   private val bootstrapServer = "localhost:29092"
   private val topicInput = "input"
-  private val topicOutput = "predictition"
+  private val topicOutput = "prediction"
   val modelPath = "./src/main/resources/model/"
 
   def main(args: Array[String]): Unit = {
@@ -31,7 +31,7 @@ object Main {
     val irisDf: DataFrame = spark.readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "localhost:29092")
-      .option("subscribe", "input")
+      .option("subscribe", topicInput)
       .load()
 
     //irisDf.printSchema()
@@ -64,7 +64,7 @@ object Main {
       .format("kafka")
       .option("kafka.bootstrap.servers", bootstrapServer)
       .option("checkpointLocation", "./src/main/resources/checkpoint")
-      .option("topic", "prediction")
+      .option("topic", topicOutput)
       .start()
       .awaitTermination()
 
